@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function Auth({ setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -9,7 +11,7 @@ export default function Auth({ setUser }) {
   const handleAuth = async () => {
     if (username.trim() && password.trim()) {
       try {
-        const res = await fetch("http://localhost:3001/users/auth/", {
+        const res = await fetch(`${API_BASE_URL}/users/auth/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -19,7 +21,7 @@ export default function Auth({ setUser }) {
         });
         const data = await res.json();
         if (res.ok) {
-          setUser(data.user); // <-- FIXED: use the user object from backend
+          setUser(data.user);
           navigate("/room");
         } else {
           alert(data.message || "Authentication failed.");

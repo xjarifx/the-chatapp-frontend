@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3001");
+const SOCKET_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
+const socket = io(SOCKET_URL);
 
 export default function Chat({ user, room, setRoom }) {
   const [message, setMessage] = useState("");
@@ -63,7 +64,9 @@ export default function Chat({ user, room, setRoom }) {
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`flex w-full flex-col ${msg.user === user.username ? "items-end" : "items-start"}`}
+            className={`flex w-full flex-col ${
+              msg.user === user.username ? "items-end" : "items-start"
+            }`}
           >
             {/* Username above the message bubble */}
             <div className="text-base-content/70 mb-1 text-xs font-semibold">

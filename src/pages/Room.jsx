@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function Room({ user, setRoom, setUser }) {
   const [roomInput, setRoomInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -13,9 +15,9 @@ export default function Room({ user, setRoom, setUser }) {
 
     try {
       setIsLoading(true);
-      const res = await fetch("http://localhost:3001/rooms/auth", {
+      const res = await fetch(`${API_BASE_URL}/rooms/auth`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" }, // <-- FIXED
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: normalizedRoom }),
       });
       const data = await res.json();
@@ -55,8 +57,12 @@ export default function Room({ user, setRoom, setUser }) {
             value={roomInput}
             onChange={(e) => setRoomInput(e.target.value)}
           />
-          <button className="btn btn-primary w-full" onClick={handleSmartRoom}>
-            Join or Create Room
+          <button
+            className="btn btn-primary w-full"
+            onClick={handleSmartRoom}
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "Join or Create Room"}
           </button>
         </div>
 
